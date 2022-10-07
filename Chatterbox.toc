@@ -4,7 +4,7 @@
 ## Version: 0.1
 ## SavedVariables: chatter_saved
 
-main.lua
+util.lua
 chatter.lua
 quotes.lua
 commands.lua
