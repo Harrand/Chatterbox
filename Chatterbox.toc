@@ -2,7 +2,7 @@
 ## Title: Chatterbox
 ## Author: Harrand
 ## Version: 0.1
-## SavedVariables: chatter.saved
+## SavedVariables: chatter_saved
 
 main.lua
 chatter.lua

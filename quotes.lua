@@ -1,32 +1,46 @@
 local addon_name, chatter = ...
 
+local function pairs_by_keys (t, f)
+    local a = {}
+    for n in pairs(t) do table.insert(a, n) end
+    table.sort(a, f)
+    local i = 0      -- iterator variable
+    local iter = function ()   -- iterator function
+        i = i + 1
+        if a[i] == nil then return nil
+        else return a[i], t[a[i]]
+        end
+    end
+    return iter
+end
+
+chatter.quotes = {}
 chatter.quotes.edit_mode = false
 chatter.quotes.editor = nil
 
 QuoteElement = {timestamp = 0, str = ""}
-Quote = {name = "Untitled", elements = {}}
-
-chatter.begin_quote = function(name)
-	if chatter.quotes.edit_mode then
-		print("Warning: You were already editing a quote. Discarding...")
+Quote = {name = "Untitled", elements = {},
+	add = function(self, element)
+		table.insert(self.elements, element)
+	end,
+	test = function(self)
+		for i, quote in ipairs(self.elements) do
+			print("timestamp = " .. quote.timestamp)
+			print("str = " .. quote.str)
+		end
 	end
-	print("Entering edit mode for a new quote \"" .. name .. "\"")
-	chatter.quotes.edit_mode = true
-	chatter.quotes.editor = Quote
-	chatter.quotes.editor.name = name
-end
+	}
 
-chatter.finish_quote = function()
-	if ~chatter.quotes.edit_mode then
-		print("Error: Cannot finish quote because you weren't editing one")
+function get_quote(name)
+	for i = 1, #chatter_saved.quotes do
+		quote = chatter_saved.quotes[i]
+		if quote ~= nil then
+			if quote.name == name then
+				return quote
+			end
+		end
 	end
-	chatter.quotes.edit_mode = false
-	print("Editing on quote \"" .. chatter.quotes.editor.name .. "\" complete!")
-	table.insert(chatter.saved.quotes, chatter.quotes.editor)
-	chatter.quotes.editor = nil
+	return nil
 end
 
-function Quote::add(element)
-	table.insert(self.elements, element)
-end
 
