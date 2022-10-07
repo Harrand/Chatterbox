@@ -2,6 +2,9 @@
 ## Title: Chatterbox
 ## Author: Harrand
 ## Version: 0.1
-## SavedVariables: ChatterboxDB
+## SavedVariables: chatter.saved
 
 main.lua
+chatter.lua
+quotes.lua
+commands.lua
