@@ -1,6 +1,12 @@
 local addon_name, chatter = ...
 
 chatter.Command = {description = "", subcmd = "", aliases = {}, func = nil}
+function chatter.Command:new(o)
+	o = o or {}
+	setmetatable(o, self)
+	self.__index = self
+	return o
+end
 function chatter.Command:help()
 	print(chatter.util.colour("00FFFF") .. "/chatter " .. self.subcmd .. chatter.util.colour() .. " - " .. self.description)
 end
@@ -17,9 +23,10 @@ chatter.print_help = function()
 	print("======================")
 end
 
-chatter.Commands["help"] = chatter.Command
-
+--------------------------------------------------------------------------------
 -- /chatter help
+chatter.Commands["help"] = chatter.Command:new()
+
 chatter.Commands["help"].description = "Displays help about all commands, or pass in a command name to view information about a specific command"
 chatter.Commands["help"].subcmd = "help"
 chatter.Commands["help"].func = function(args)
@@ -30,6 +37,24 @@ chatter.Commands["help"].func = function(args)
 		chatter.Commands[subcmd]:help()
 	end
 end
+
+-- /chatter quotes
+chatter.Commands["quotes"] = chatter.Command:new()
+chatter.Commands["quotes"].description = "Display all available quotes"
+chatter.Commands["quotes"].subcmd = "quotes"
+chatter.Commands["quotes"].func = function(args)
+	print("TODO: Implement quotes ;)")
+end
+
+-- / chatter quote
+chatter.Commands["quote"] = chatter.Command:new()
+chatter.Commands["quote"].description = "/say a quote!"
+chatter.Commands["quote"].subcmd = "quote"
+chatter.Commands["quote"].func = function(args)
+	local quote_name = args[1]
+	print("<PLACEHOLDER QUOTE \"" .. quote_name .. "\">")
+end
+--------------------------------------------------------------------------------
 
 -- Implementation specific, WoW command hookup.
 
