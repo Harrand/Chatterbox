@@ -1,0 +1,7 @@
+## Interface: 90207
+## Title: Chatterbox
+## Author: Harrand
+## Version: 0.1
+## SavedVariables: ChatterboxDB
+
+main.lua
