@@ -12,6 +12,7 @@ chatter.chat_type["/i"] = "INSTANCE"
 chatter.chat_type["/bg"] = "BATTLEGROUND"
 chatter.chat_type["/w"] = "WHISPER"
 chatter.chat_type["/x"] = "CHANNEL"
+chatter.chat_type["/0"] = "DEBUG"
 
 chatter.current_chat_type = chatter.chat_type["/s"]
 chatter.current_chat_extra = ""

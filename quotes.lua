@@ -46,8 +46,15 @@ function chatter.Quote:say()
 		print("Quote \"" .. self.name .. "\" had no lines, nothing to say!")
 		return
 	end
+	function send_payload(x)
+		if chatter.current_chat_type == chatter.chat_type["/0"] then
+			print("Debug: " .. strings[x])
+		else
+			SendChatMessage(strings[x], chatter.current_chat_type, nil, chatter.current_chat_extra)
+		end
+	end
 	function do_delay(x, elapsed)
-		chatter.util.delay(timestamps[x] - elapsed, function() SendChatMessage(strings[x], chatter.current_chat_type, nil, chatter.current_chat_extra); if x < i-1 then do_delay(x+1, timestamps[x] + elapsed) end end)
+		chatter.util.delay(timestamps[x] - elapsed, function() send_payload(x); if x < i-1 then do_delay(x+1, timestamps[x] + elapsed) end end)
 	end
 	function do_delay_start()
 		do_delay(1, 0)

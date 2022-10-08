@@ -30,6 +30,7 @@ chatter.util.impl.delay_function = function()
 		if chatter.util.impl.delay_event ~= nil then
 			chatter.util.impl.delay_event()
 		end
+		chatter.util.delay_event = nil
 	end
 end
 chatter.util.impl.delay_frame:SetScript("OnUpdate", chatter.util.impl.delay_function)

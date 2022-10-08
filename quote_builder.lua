@@ -21,10 +21,10 @@ end
 
 function chatter.QuoteBuilder:edit(quote)
 	-- we have an existing quote. make a builder from it.
-	ret = chatter.QuoteBuilder:new()
-	self.name = quote.name
+	ret = chatter.QuoteBuilder:new(nil, quote.name)
+	ret.entries = {}
 	for timestamp, str in pairs(quote.elements) do
-		entry = chatter.QuoteBuilderEntry:new()
+		local entry = chatter.QuoteBuilderEntry:new()
 		entry.timestamp = timestamp
 		entry.message = quote.str
 		table.insert(ret.entries, entry)

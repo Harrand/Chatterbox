@@ -157,17 +157,14 @@ chatter.Commands["finish"].func = function(args)
 
 	result = chatter.quotes.finish_edit()
 	local quote_name = result.name
-	print("AAAH")
 	for i, q in pairs(chatter_global_save.quotes) do
 		if q.name == quote_name then
 			table.remove(chatter_global_save.quotes, i)
-			table.insert(chatter_global_save.quotes, result)
-			print("Finalised edit of \"" .. quote_name .. "\"")
-			print("Quote \"" .. quote_name .. "\" now has a size of " .. result:length() .. " lines")
+			table.insert(chatter_global_save.quotes, {name = result.name, elements = result.elements})
+			print("Finalised edit of \"" .. quote_name .. "\" (now with " .. result:length() .. " lines)")
 			return
 		end
 	end
-	print("ruh roh internal error")
 end
 
 -- / chatter clearquotes
