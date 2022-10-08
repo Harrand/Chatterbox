@@ -7,4 +7,5 @@
 util.lua
 chatter.lua
 quotes.lua
+quote_builder.lua
 commands.lua

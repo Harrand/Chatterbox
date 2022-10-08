@@ -43,7 +43,14 @@ chatter.Commands["quotes"] = chatter.Command:new()
 chatter.Commands["quotes"].description = "Display all available quotes"
 chatter.Commands["quotes"].subcmd = "quotes"
 chatter.Commands["quotes"].func = function(args)
-	print("TODO: Implement quotes ;)")
+	-- protect against no quotes existing
+	if chatter_global_save.quotes == nil then
+		chatter_global_save.quotes = {}
+	end
+	for i, q in pairs(chatter_global_save.quotes) do
+		local quote = chatter.Quote:new(q)
+		print("Quote " .. i .. ": \"" .. quote.name .. "\" (" .. quote:length() .. " lines)")
+	end
 end
 
 -- / chatter quote
@@ -52,7 +59,64 @@ chatter.Commands["quote"].description = "/say a quote!"
 chatter.Commands["quote"].subcmd = "quote"
 chatter.Commands["quote"].func = function(args)
 	local quote_name = args[1]
-	print("<PLACEHOLDER QUOTE \"" .. quote_name .. "\">")
+	local id = nil
+	for i, q in pairs(chatter_global_save.quotes) do
+		if q.name == quote_name then
+			id = i
+			local quote = chatter.Quote:new(q)
+			quote:say()
+			return
+		end
+	end
+	print("Error: No such quote exists with the name \"" .. quote_name .. "\"")
+end
+
+-- / chatter addquote
+chatter.Commands["addquote"] = chatter.Command:new()
+chatter.Commands["addquote"].description = "create a new quote"
+chatter.Commands["addquote"].subcmd = "addquote"
+chatter.Commands["addquote"].func = function(args)
+	-- if we're adding the first quote, this will be nil
+	if chatter_global_save.quotes == nil then
+		chatter_global_save.quotes = {}
+	end
+	local quote_name = args[1]
+	table.insert(chatter_global_save.quotes, {name = quote_name, elements = {}})
+	print("Added new empty quote \"" .. quote_name .. "\"")
+end
+
+-- / chatter delquote
+chatter.Commands["delquote"] = chatter.Command:new()
+chatter.Commands["delquote"].description = "delete an existing quote"
+chatter.Commands["delquote"].subcmd = "delquote"
+chatter.Commands["delquote"].func = function(args)
+	-- if we're adding the first quote, this will be nil
+	if chatter_global_save.quotes == nil then
+		chatter_global_save.quotes = {}
+		return
+	end
+	local quote_name = args[1]
+	local id = nil
+	for i, q in pairs(chatter_global_save.quotes) do
+		if q.name == quote_name then
+			id = i
+		end
+	end
+	if id == nil then
+		print("Error: No such quote by the name of \"" .. quote_name .. "\". Nothing happened")
+	else
+		table.remove(chatter_global_save.quotes, id)
+		print("Deleted quote \"" .. quote_name .. "\"")
+	end
+end
+
+-- / chatter clearquotes
+chatter.Commands["clearquotes"] = chatter.Command:new()
+chatter.Commands["clearquotes"].description = "permanently delete all quotes"
+chatter.Commands["clearquotes"].subcmd = "clearquotes"
+chatter.Commands["clearquotes"].func = function(args)
+	chatter_global_save.quotes = {}
+	print("Deleted all quotes.")
 end
 
 -- / chatter channel
@@ -85,7 +149,7 @@ chatter.Commands["testquote"] = chatter.Command:new()
 chatter.Commands["testquote"].description = "/say a test quote!"
 chatter.Commands["testquote"].subcmd = "testquote"
 chatter.Commands["testquote"].func = function(args)
-	local q = chatter.Quote
+	local q = chatter.Quote:new()
 	q.name = "Test Quote"
 	q.elements[0] = "harrybo was"
 	q.elements[700] = "DEAD!!!"

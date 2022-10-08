@@ -1,5 +1,7 @@
 local addon_name, chatter = ...
 
+chatter_global_save = {}
+
 chatter.Quote = {name = "", elements = {}}
 function chatter.Quote:new(o)
 	o = o or {}
@@ -39,6 +41,10 @@ function chatter.Quote:say()
 		timestamps[i] = timestamp
 		strings[i] = str
 		i = i + 1 
+	end
+	if i == 1 then
+		print("Quote \"" .. self.name .. "\" had no lines, nothing to say!")
+		return
 	end
 	function do_delay(x, elapsed)
 		chatter.util.delay(timestamps[x] - elapsed, function() SendChatMessage(strings[x], chatter.current_chat_type, nil, chatter.current_chat_extra); if x < i-1 then do_delay(x+1, timestamps[x] + elapsed) end end)
