@@ -59,10 +59,8 @@ chatter.Commands["quote"].description = "/say a quote!"
 chatter.Commands["quote"].subcmd = "quote"
 chatter.Commands["quote"].func = function(args)
 	local quote_name = args[1]
-	local id = nil
 	for i, q in pairs(chatter_global_save.quotes) do
 		if q.name == quote_name then
-			id = i
 			local quote = chatter.Quote:new(q)
 			quote:say()
 			return
@@ -108,6 +106,68 @@ chatter.Commands["delquote"].func = function(args)
 		table.remove(chatter_global_save.quotes, id)
 		print("Deleted quote \"" .. quote_name .. "\"")
 	end
+end
+
+-- / chatter edit
+chatter.Commands["edit"] = chatter.Command:new()
+chatter.Commands["edit"].description = "begin editing an existing quote"
+chatter.Commands["edit"].subcmd = "edit"
+chatter.Commands["edit"].func = function(args)
+	local quote_name = args[1]
+	if chatter_global_save.quotes == nil then
+		print("You have no quotes. Create a quote with " .. chatter.util.colour("00FFFFF") .. "/chatter addquote" .. chatter.util.colour() .. " first.")
+		return
+	end
+
+	for i, q in pairs(chatter_global_save.quotes) do
+		if q.name == quote_name then
+			local quote = chatter.Quote:new(q)
+				chatter.quotes.begin_edit(chatter.QuoteBuilder:edit(quote))
+			return
+		end
+	end
+end
+
+-- / chatter line
+chatter.Commands["line"] = chatter.Command:new()
+chatter.Commands["line"].description = "set the line at the given timestamp"
+chatter.Commands["line"].subcmd = "line"
+chatter.Commands["line"].func = function(args)
+	local timestamp = tonumber(args[1])
+	local message = ""
+	for i = 2, #args do
+		message = message .. args[i] .. " "	
+	end
+	e = chatter.QuoteBuilderEntry:new()
+	e.timestamp = timestamp
+	e.message = message
+	table.insert(chatter.quotes.edit.entries, e)
+	print("Set message of \"" .. e.message .. "\" at timestamp " .. e.timestamp)
+end
+
+-- / chatter finish
+chatter.Commands["finish"] = chatter.Command:new()
+chatter.Commands["finish"].description = "finish edit of an existing quote, and save changes"
+chatter.Commands["finish"].subcmd = "finish"
+chatter.Commands["finish"].func = function(args)
+	if chatter_global_save.quotes == nil then
+		print("You have no quotes. Create a quote with " .. chatter.util.colour("00FFFFF") .. "/chatter addquote" .. chatter.util.colour() .. " first.")
+		return
+	end
+
+	result = chatter.quotes.finish_edit()
+	local quote_name = result.name
+	print("AAAH")
+	for i, q in pairs(chatter_global_save.quotes) do
+		if q.name == quote_name then
+			table.remove(chatter_global_save.quotes, i)
+			table.insert(chatter_global_save.quotes, result)
+			print("Finalised edit of \"" .. quote_name .. "\"")
+			print("Quote \"" .. quote_name .. "\" now has a size of " .. result:length() .. " lines")
+			return
+		end
+	end
+	print("ruh roh internal error")
 end
 
 -- / chatter clearquotes
