@@ -41,7 +41,7 @@ function chatter.Quote:say()
 		i = i + 1 
 	end
 	function do_delay(x, elapsed)
-		chatter.util.delay(timestamps[x] - elapsed, function() SendChatMessage(strings[x]); if x < i-1 then do_delay(x+1, timestamps[x] + elapsed) end end)
+		chatter.util.delay(timestamps[x] - elapsed, function() SendChatMessage(strings[x], chatter.current_chat_type, nil, chatter.current_chat_extra); if x < i-1 then do_delay(x+1, timestamps[x] + elapsed) end end)
 	end
 	function do_delay_start()
 		do_delay(1, 0)

@@ -55,6 +55,27 @@ chatter.Commands["quote"].func = function(args)
 	print("<PLACEHOLDER QUOTE \"" .. quote_name .. "\">")
 end
 
+-- / chatter channel
+chatter.Commands["channel"] = chatter.Command:new()
+chatter.Commands["channel"].description = "Set which chat channel quotes are sent to"
+chatter.Commands["channel"].subcmd = "channel"
+chatter.Commands["channel"].func = function(args)
+	local chat_type = args[1]
+	if chat_type == nil then
+		print("Current channel: " .. chatter.current_chat_type)
+	else
+		local t = chatter.chat_type[chat_type]
+		if t == nil then
+			print("Error: Unrecognised chat channel \"" .. chat_type .. "\"")
+		end
+		chatter.current_chat_type = t
+	end
+	local chat_extra = args[2]
+	if chat_extra ~= nil then
+		chatter.current_chat_extra = chat_extra
+	end
+end
+
 -- / chatter testquote
 chatter.Commands["testquote"] = chatter.Command:new()
 chatter.Commands["testquote"].description = "/say a test quote!"
@@ -63,7 +84,7 @@ chatter.Commands["testquote"].func = function(args)
 	local q = chatter.Quote
 	q.name = "Test Quote"
 	q.elements[0] = "harrybo was"
-	q.elements[500] = "DEAD!!!"
+	q.elements[700] = "DEAD!!!"
 	q.elements[2500] = "and everything was lovely once again. wonderful."
 	q.elements[5500] = "and then we went home"
 	q:say()
