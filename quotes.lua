@@ -22,7 +22,7 @@ local function sorted_iter(t)
 	for k in next, t do
 		table.insert(i, k)
 	end
-	table.sort(i)
+	table.sort(i, function(a, b) return a > b end)
 	return function()
 		local k = table.remove(i)
 		if k ~= nil then
@@ -32,9 +32,19 @@ local function sorted_iter(t)
 end
 
 function chatter.Quote:say()
+	local timestamps = {}
+	local strings = {}
+	local i = 1
 	for timestamp, str in sorted_iter(self.elements) do
-		print("NYI, info:")
-		print("timestamp = " .. timestamp)
-		print("str = " .. str)
+		timestamps[i] = timestamp
+		strings[i] = str
+		i = i + 1 
 	end
+	function do_delay(x, elapsed)
+		chatter.util.delay(timestamps[x] - elapsed, function() SendChatMessage(strings[x]); if x < i-1 then do_delay(x+1, timestamps[x] + elapsed) end end)
+	end
+	function do_delay_start()
+		do_delay(1, 0)
+	end
+	chatter.util.delay(0, do_delay_start)
 end

@@ -54,6 +54,20 @@ chatter.Commands["quote"].func = function(args)
 	local quote_name = args[1]
 	print("<PLACEHOLDER QUOTE \"" .. quote_name .. "\">")
 end
+
+-- / chatter testquote
+chatter.Commands["testquote"] = chatter.Command:new()
+chatter.Commands["testquote"].description = "/say a test quote!"
+chatter.Commands["testquote"].subcmd = "testquote"
+chatter.Commands["testquote"].func = function(args)
+	local q = chatter.Quote
+	q.name = "Test Quote"
+	q.elements[0] = "harrybo was"
+	q.elements[500] = "DEAD!!!"
+	q.elements[2500] = "and everything was lovely once again. wonderful."
+	q.elements[5500] = "and then we went home"
+	q:say()
+end
 --------------------------------------------------------------------------------
 
 -- Implementation specific, WoW command hookup.
