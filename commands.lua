@@ -62,7 +62,11 @@ chatter.Commands["channel"].subcmd = "channel"
 chatter.Commands["channel"].func = function(args)
 	local chat_type = args[1]
 	if chat_type == nil then
-		print("Current channel: " .. chatter.current_chat_type)
+		local extras = ""
+		if chatter.current_chat_type == chatter.chat_type["/w"] or chatter.current_chat_type == chatter.chat_type["/x"] then
+			extras = " (" .. chatter.current_chat_extra .. ")"
+		end
+		print("Current channel: " .. chatter.current_chat_type .. extras)
 	else
 		local t = chatter.chat_type[chat_type]
 		if t == nil then
